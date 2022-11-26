@@ -26,7 +26,7 @@ def run_time_counter(func):
         st = time.time()
         result = func(*args)
         et = time.time()
-        logging.debug(f'Функція запущена: {start_func}. Час виконання функції: {(et - st)} s')
+        logging.debug(f'Функція запущена: {start_func}. Час виконання функції: {(et - st)} сек.')
         return result
     return wrapper
 
@@ -42,19 +42,19 @@ def exception_handler(func):
 
 def user_access_company(func):
     def wrapper(user_id: str, company_id: str):
-        get_user = get_obj('users_db.json', user_id, f'"Користувач id={user_id}"')
+        get_user = get_obj('users_db.json', user_id, f'Користувача id={user_id}')
         result = func(company_id)
         if int(company_id) not in get_user['companies']:
-            raise exceptions.NoAccess(f'"Користувач id={user_id}"')
+            raise exceptions.NoAccess(f'Користувач id={user_id}')
         return result
     return wrapper
 
 
-@run_time_counter
 @exception_handler
 @user_access_company
+@run_time_counter
 def get_company_city(company_id: str):
-    get_company = get_obj('company_db.json', company_id, f'"Компанія id={company_id}"')
+    get_company = get_obj('company_db.json', company_id, f'Компанії id={company_id}')
     company_city_ = get_company['city']
     return company_city_
 
